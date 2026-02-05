@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Body>
+        <EudrEchoResponse xmlns="http://ec.europa.eu/tracesnt/eudr/echo">hello</EudrEchoResponse>
+    </soapenv:Body>
+</soapenv:Envelope>

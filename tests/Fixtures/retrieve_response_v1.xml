@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Body>
+        <ns2:GetStatementInfoResponse xmlns:ns2="http://ec.europa.eu/tracesnt/certificate/eudr/retrieval/v1">
+            <ns2:statementInfo>
+                <ns2:identifier>EUDR.2024.DE.9876543210</ns2:identifier>
+                <ns2:internalReferenceNumber>V1-REF-001</ns2:internalReferenceNumber>
+                <ns2:referenceNumber>REF-2024-V1-001</ns2:referenceNumber>
+                <ns2:verificationNumber>VER-2024-V1-001</ns2:verificationNumber>
+                <ns2:status>AVAILABLE</ns2:status>
+                <ns2:updatedBy>v1user@example.com</ns2:updatedBy>
+            </ns2:statementInfo>
+        </ns2:GetStatementInfoResponse>
+    </soapenv:Body>
+</soapenv:Envelope>

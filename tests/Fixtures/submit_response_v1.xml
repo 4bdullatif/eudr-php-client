@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Body>
+        <ns2:SubmitStatementResponse xmlns:ns2="http://ec.europa.eu/tracesnt/certificate/eudr/submission/v1">
+            <ddsIdentifier>EUDR.2024.DE.9876543210</ddsIdentifier>
+            <timestamp>2024-05-10T08:15:00Z</timestamp>
+        </ns2:SubmitStatementResponse>
+    </soapenv:Body>
+</soapenv:Envelope>

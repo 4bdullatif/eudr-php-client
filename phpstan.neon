@@ -1,0 +1,25 @@
+parameters:
+    level: 9
+    paths:
+        - src
+        - tests
+    tmpDir: .phpstan.cache
+    ignoreErrors:
+        -
+            identifier: cast.string
+            path: tests/Support/TestLogger.php
+        -
+            identifier: property.onlyWritten
+            path: tests/Unit/Http/Middleware/MiddlewarePipelineTest.php
+        -
+            identifier: method.alreadyNarrowedType
+            path: tests/Unit/Http/Middleware/SecurityHeaderTest.php
+        -
+            identifier: property.nonObject
+            path: tests/Unit/Http/Middleware/SecurityHeaderTest.php
+        -
+            identifier: method.nonObject
+            path: tests/Unit/Http/Middleware/SecurityHeaderTest.php
+        -
+            identifier: property.notFound
+            path: tests/Unit/Http/Middleware/SecurityHeaderTest.php
