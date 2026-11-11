@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+    <!-- Response Header (same structure as submitSd response) -->
+    <S:Body>
+        <ns5:UpdateSdResponse xmlns:ns5="http://ec.europa.eu/tracesnt/certificate/eudr/simplified-declaration/v3"
+                              xmlns:ns3="http://ec.europa.eu/tracesnt/certificate/eudr/common/v3">
+            <ns5:uuid>e3b3206d-6625-47a0-b2ef-b8a7b9da1217</ns5:uuid>
+            <ns5:version>2</ns5:version>
+            <ns5:status>AVAILABLE</ns5:status>
+        </ns5:UpdateSdResponse>
+    </S:Body>
+</S:Envelope>

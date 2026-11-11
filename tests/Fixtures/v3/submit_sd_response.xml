@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+    <S:Header>
+        <ns2:Security xmlns:ns1="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                      xmlns:ns2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+            <ns1:Timestamp>
+                <ns1:Created>2026-05-20T12:17:41.575+02:00</ns1:Created>
+                <ns1:Expires>2026-05-20T12:17:46.576+02:00</ns1:Expires>
+            </ns1:Timestamp>
+        </ns2:Security>
+    </S:Header>
+    <S:Body>
+        <ns5:SubmitSdResponse xmlns:ns5="http://ec.europa.eu/tracesnt/certificate/eudr/simplified-declaration/v3">
+            <ns5:sdIdentifier>e3b3206d-6625-47a0-b2ef-b8a7b9da1217</ns5:sdIdentifier>
+        </ns5:SubmitSdResponse>
+    </S:Body>
+</S:Envelope>
