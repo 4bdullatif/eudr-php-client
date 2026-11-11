@@ -10,6 +10,8 @@ use Eudr\Http\Middleware\Middleware;
 use Eudr\Requests\EchoRequest;
 use Eudr\Resources\DdsResource;
 use Eudr\Resources\V1\DdsResource as DdsResourceV1;
+use Eudr\Resources\V3\DdsResource as DdsResourceV3;
+use Eudr\Resources\V3\SdResource as SdResourceV3;
 use Eudr\Responses\EchoResponse;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -20,6 +22,8 @@ final class EudrClient
     private readonly Connector $connector;
     private ?DdsResource $ddsResource = null;
     private ?DdsResourceV1 $ddsResourceV1 = null;
+    private ?DdsResourceV3 $ddsResourceV3 = null;
+    private ?SdResourceV3 $sdResourceV3 = null;
 
     /**
      * @param list<Middleware> $middleware
@@ -56,6 +60,30 @@ final class EudrClient
         }
 
         return $this->ddsResourceV1;
+    }
+
+    /**
+     * Due Diligence Statement operations of the V3 API (EUDRDueDiligenceStatementServiceV3).
+     */
+    public function ddsV3(): DdsResourceV3
+    {
+        if ($this->ddsResourceV3 === null) {
+            $this->ddsResourceV3 = new DdsResourceV3($this->connector);
+        }
+
+        return $this->ddsResourceV3;
+    }
+
+    /**
+     * Simplified Declaration operations of the V3 API (EUDRSimplifiedDeclarationServiceV3).
+     */
+    public function sdV3(): SdResourceV3
+    {
+        if ($this->sdResourceV3 === null) {
+            $this->sdResourceV3 = new SdResourceV3($this->connector);
+        }
+
+        return $this->sdResourceV3;
     }
 
     /**

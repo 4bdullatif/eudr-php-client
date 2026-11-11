@@ -150,10 +150,18 @@ final readonly class ErrorResponse implements Response
      */
     private static function findErrors(\SimpleXMLElement $element, string $ns, array &$errors): void
     {
-        $children = $element->children($ns);
+        // Walk child elements of every namespace: Error elements in the error namespace may be
+        // wrapped by an element of the service namespace (e.g. dds:BusinessRulesValidationException).
+        $children = $element->xpath('./*');
+
+        if (!\is_array($children)) {
+            return;
+        }
 
         foreach ($children as $child) {
-            if ($child->getName() === 'Error') {
+            $childNs = dom_import_simplexml($child)->namespaceURI ?? '';
+
+            if ($child->getName() === 'Error' && $childNs === $ns) {
                 $errorChildren = $child->children($ns);
                 $id = (string) ($errorChildren->ID ?? '');
 
