@@ -4,12 +4,13 @@
 [![PHP 8.3+](https://img.shields.io/badge/PHP-8.3%2B-8892BF.svg)](https://www.php.net/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A framework-agnostic PHP client for the [EU Deforestation Regulation (EUDR)](https://environment.ec.europa.eu/topics/forests/deforestation/regulation-deforestation-free-products_en) TracesNT SOAP API. Supports the V1, V2 and V3 endpoints with full WS-Security authentication.
+A framework-agnostic PHP client for the [EU Deforestation Regulation (EUDR)](https://environment.ec.europa.eu/topics/forests/deforestation/regulation-deforestation-free-products_en) TracesNT SOAP API. Supports the V1, V2, V3 and V4 endpoints with full WS-Security authentication.
 
 ## Features
 
 - Full V1 and V2 API coverage: Submit, Amend, Retract, Retrieve, and cross-supply-chain operations
-- V3 API (Regulation (EU) 2025/2650): Due Diligence Statements and Simplified Declarations, grouped declarations, multi-operator `BodyIdentity` header
+- V3 and V4 APIs (Regulation (EU) 2025/2650): Due Diligence Statements and Simplified Declarations, grouped declarations, multi-operator `BodyIdentity` header
+- V4 additions: reference-number status, summary address, `EudrUserMessage` announcements
 - WS-Security password digest authentication
 - Immutable request builders with fluent API
 - PSR-18 HTTP client with auto-discovery
@@ -32,6 +33,7 @@ A framework-agnostic PHP client for the [EU Deforestation Regulation (EUDR)](htt
   - [Retrieving a DDS](#retrieving-a-dds)
   - [Cross-Supply-Chain Retrieval](#cross-supply-chain-retrieval)
   - [Echo Service](#echo-service)
+- [V4 API](#v4-api)
 - [V3 API](#v3-api)
 - [Middleware](#middleware)
 - [Error Handling](#error-handling)
@@ -169,7 +171,7 @@ $client = new EudrClient(
 | GetReferencedDds           | Follow referenced DDS chain          |  -  |  Y  |
 | Echo                       | Test connectivity and authentication |  Y  |  Y  |
 
-V3 uses different operations and data structures; see [V3 API](#v3-api).
+V3 and V4 use different operations and data structures. See [V4 API](#v4-api) and [V3 API](#v3-api).
 
 ---
 
@@ -352,6 +354,78 @@ $response = $client->echo('hello');
 $response->result;      // Echo response from server
 $response->isSuccess(); // true
 ```
+
+---
+
+## V4 API
+
+V4 is the current version of the EUDR operator API. It keeps the V3 operations and data model, so V4 is used
+exactly like V3 (see [V3 API](#v3-api)): replace `V3` with `V4` in the namespaces (`Eudr\Requests\V4`,
+`Eudr\Data\V4`, `Eudr\Enums\V4`, `Eudr\Responses\V4`) and call `ddsV4()` / `sdV4()` instead of `ddsV3()` / `sdV3()`.
+The V4 classes are self-contained, so V3 can be removed later without affecting them.
+
+| Service                                    | Resource            | Operations                                                                 |
+|--------------------------------------------|---------------------|----------------------------------------------------------------------------|
+| `EUDRDueDiligenceStatementServiceV4` (DDS) | `$client->ddsV4()`  | `submitDds`, `amendDds`, `withdrawDds`, `getDds`, `getDdsByInternalReference` |
+| `EUDRSimplifiedDeclarationServiceV4` (SD)  | `$client->sdV4()`   | `submitSd`, `updateSd`, `withdrawSd`, `getSd`, `getSdByInternalReference`  |
+
+Changes compared to V3:
+
+| Change                                   | Where                                                                                     |
+|------------------------------------------|-------------------------------------------------------------------------------------------|
+| Namespaces moved to `/v4`                | Service, common model and `BodyIdentity` header (handled by the library)                  |
+| Reference-number status                  | `OverviewResponse::$referenceNumberInfo` (e.g. "Under system analysis", "Assigned")       |
+| Summary address (name, country)          | `RepresentedOperator::$summaryAddress` (`Eudr\Data\V4\SummaryAddress`), optional          |
+| User information messages                | `$userMessage` on every V4 response, from the `EudrUserMessage` SOAP response header       |
+| SD internal reference widened            | Up to 50 characters (V3: 14)                                                              |
+| New status                               | `EudrStatus::CANCELLED`                                                                   |
+| SD retrieval SOAPActions                 | Now in the SD namespace (handled by the library)                                          |
+| Grouping on SD update                    | No longer documented as forbidden, so not blocked client-side (still blocked on DDS amend) |
+
+```php
+use Eudr\Data\SpeciesInfo;
+use Eudr\Data\V4\DdsCommodity;
+use Eudr\Data\V4\DdsProducer;
+use Eudr\Data\V4\GoodsMeasure;
+use Eudr\Enums\ActivityType;
+use Eudr\Enums\V4\OperatorRole;
+use Eudr\Requests\V4\SubmitDdsRequest;
+
+$response = $client->ddsV4()->submit(
+    SubmitDdsRequest::make()
+        ->withOperatorRole(OperatorRole::OPERATOR)
+        ->withActivityType(ActivityType::IMPORT)
+        ->addCommodity(new DdsCommodity(
+            description: 'Cocoa beans',
+            hsHeading: '1801',
+            goodsMeasure: new GoodsMeasure(netWeight: 5000.0),
+            speciesInfo: [new SpeciesInfo('Theobroma cacao', 'Cacao')],
+            producers: [DdsProducer::fromGeoJson('BR', ['type' => 'Point', 'coordinates' => [-47.871234, -15.791234]])],
+        )),
+);
+
+$response->uuid;        // "071874bd-8c62-4cac-8eb6-b2fbe003410c"
+$response->userMessage; // null, or an EUDR announcement such as "Planned maintenance on ..."
+
+$overview = $client->ddsV4()->retrieve($response->uuid);
+$overview->referenceNumberInfo; // "Under system analysis" until the reference number is assigned
+$overview->referenceNumber;     // null until assigned, then e.g. "26BE7XTVCZAQ2S"
+```
+
+A represented operator can carry the optional V4 summary address:
+
+```php
+use Eudr\Data\V4\RepresentedOperator;
+use Eudr\Data\V4\SummaryAddress;
+
+new RepresentedOperator(
+    name: 'Example GmbH',
+    summaryAddress: new SummaryAddress(name: 'Example GmbH', country: 'DE'),
+);
+```
+
+The V4 base URLs are the same as for V3 (`https://eudr.webcloud.ec.europa.eu/tracesnt/ws` and
+`https://acceptance.eudr.webcloud.ec.europa.eu/tracesnt/ws`).
 
 ---
 
@@ -690,10 +764,12 @@ foreach ($error->errors as $detail) {
 
 ## API Versions
 
-The package supports V1, V2 and V3 of the EUDR API. `dds()` keeps returning the V2 resource so that existing code
-works as before. V3 is available through `ddsV3()` and `sdV3()` (see [V3 API](#v3-api)).
+The package supports V1, V2, V3 and V4 of the EUDR API. `dds()` keeps returning the V2 resource so that existing code
+works as before. V3 is available through `ddsV3()` / `sdV3()` and V4 through `ddsV4()` / `sdV4()`
+(see [V4 API](#v4-api) and [V3 API](#v3-api)).
 
-> According to the EUDR documentation, V1 and V2 are decommissioned once V3 is released. Move new integrations to V3.
+> According to the EUDR documentation, V1 and V2 are decommissioned once V3 is released. V4 is the current version, and V3
+> stays available during a transition period. New integrations should target V4 (`ddsV4()` / `sdV4()`).
 
 ```php
 // V2 (default)
@@ -722,6 +798,10 @@ $client->sdV3()->submit($sdRequest);
 $client->sdV3()->update($sdUpdateRequest);
 $client->sdV3()->withdraw($sdWithdrawRequest);
 $client->sdV3()->retrieve('uuid', version: 2);
+
+// V4 (same operations as V3)
+$client->ddsV4()->submit($v4Request);
+$client->sdV4()->submit($v4SdRequest);
 
 // Echo (connectivity test)
 $client->echo('hello');
@@ -765,8 +845,8 @@ composer check            # Run all checks
 ```
 src/
 ├── Config/           Configuration and credentials
-├── Data/             Immutable value objects (Commodity, Producer, Address, etc.; V3/ for V3 types)
-├── Enums/            OperatorType, ActivityType, DdsStatus (V3/ for V3 enums)
+├── Data/             Immutable value objects (Commodity, Producer, Address, etc.; V3/ and V4/ for V3/V4 types)
+├── Enums/            OperatorType, ActivityType, DdsStatus (V3/ and V4/ for V3/V4 enums)
 ├── Exceptions/       Exception hierarchy
 ├── Http/             PSR-18 connector and middleware pipeline
 │   └── Middleware/   Retry, logging, and custom middleware
@@ -774,12 +854,14 @@ src/
 │   ├── Builders/     Fluent builders for Commodity, Producer, Operator
 │   ├── V1/           V1-specific requests and XML traits
 │   ├── V2/           V2-specific requests and XML traits
-│   └── V3/           V3 DDS and Simplified Declaration requests
-├── Resources/        API resource classes (DDS operations; V3 DDS and SD)
+│   ├── V3/           V3 DDS and Simplified Declaration requests
+│   └── V4/           V4 DDS and Simplified Declaration requests
+├── Resources/        API resource classes (DDS operations; V3/V4 DDS and SD)
 ├── Responses/        SOAP response parsers
 │   ├── V1/           V1 response parsers
 │   ├── V2/           V2 response parsers
-│   └── V3/           V3 submit, modification and overview parsers
+│   ├── V3/           V3 submit, modification and overview parsers
+│   └── V4/           V4 submit, modification and overview parsers
 ├── Support/          XML utilities, namespace constants, SOAP envelope parser
 └── EudrClient.php    Main entry point
 ```

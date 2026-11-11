@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+    <S:Body>
+        <S:Fault>
+            <faultcode>S:Server</faultcode>
+            <faultstring>Declaration detail access is possible only over UI</faultstring>
+            <detail>
+                <ns5:NotFoundException xmlns:ns5="http://ec.europa.eu/tracesnt/certificate/eudr/simplified-declaration/v4">
+                    <ns5:message>Declaration detail access is possible only over UI</ns5:message>
+                </ns5:NotFoundException>
+            </detail>
+        </S:Fault>
+    </S:Body>
+</S:Envelope>

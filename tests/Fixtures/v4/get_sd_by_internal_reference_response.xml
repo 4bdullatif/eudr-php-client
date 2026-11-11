@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+    <!-- Response Header (same structure as submitSd response) -->
+    <S:Body>
+        <ns5:GetSdByInternalReferenceResponse xmlns:ns3="http://ec.europa.eu/tracesnt/certificate/eudr/common/v4"
+                                              xmlns:ns5="http://ec.europa.eu/tracesnt/certificate/eudr/simplified-declaration/v4">
+            <ns5:sdOverviewList>
+                <ns3:uuid>e3b3206d-6625-47a0-b2ef-b8a7b9da1217</ns3:uuid>
+                <ns3:internalReferenceNumber>REF-0001000087</ns3:internalReferenceNumber>
+                <ns3:referenceNumber>S26BECB39D2GRX</ns3:referenceNumber>
+                <ns3:referenceNumberInfo>Assigned</ns3:referenceNumberInfo>
+                <ns3:verificationNumber>H6ORMNTX</ns3:verificationNumber>
+                <ns3:status>AVAILABLE</ns3:status>
+                <ns3:date>2026-05-20T10:20:01.000Z</ns3:date>
+                <ns3:updatedBy>User25 User25</ns3:updatedBy>
+            </ns5:sdOverviewList>
+        </ns5:GetSdByInternalReferenceResponse>
+    </S:Body>
+</S:Envelope>

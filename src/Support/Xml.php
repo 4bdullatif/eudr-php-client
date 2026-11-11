@@ -22,6 +22,11 @@ final class Xml
     public const EUDR_COMMON_NS_V3 = 'http://ec.europa.eu/tracesnt/certificate/eudr/common/v3';
     public const TRACESNT_BODY_NS_V3 = 'http://ec.europa.eu/tracesnt/body/v3';
 
+    public const EUDR_DDS_NS_V4 = 'http://ec.europa.eu/tracesnt/certificate/eudr/due-diligence-statement/v4';
+    public const EUDR_SD_NS_V4 = 'http://ec.europa.eu/tracesnt/certificate/eudr/simplified-declaration/v4';
+    public const EUDR_COMMON_NS_V4 = 'http://ec.europa.eu/tracesnt/certificate/eudr/common/v4';
+    public const TRACESNT_BODY_NS_V4 = 'http://ec.europa.eu/tracesnt/body/v4';
+
     public const TRACESNT_BASE_NS = 'http://ec.europa.eu/sanco/tracesnt/base/v4';
     public const TRACESNT_ERROR_NS = 'http://ec.europa.eu/sanco/tracesnt/error/v01';
     public const EUDR_ECHO_NS = 'http://ec.europa.eu/tracesnt/eudr/echo';

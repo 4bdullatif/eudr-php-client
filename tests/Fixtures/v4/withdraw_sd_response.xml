@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+    <!-- Response Header (same structure as submitSd response) -->
+    <S:Body>
+        <ns5:WithdrawSdResponse xmlns:ns5="http://ec.europa.eu/tracesnt/certificate/eudr/simplified-declaration/v4"
+                                xmlns:ns3="http://ec.europa.eu/tracesnt/certificate/eudr/common/v4">
+            <ns5:uuid>e3b3206d-6625-47a0-b2ef-b8a7b9da1217</ns5:uuid>
+            <ns5:status>WITHDRAWN</ns5:status>
+        </ns5:WithdrawSdResponse>
+    </S:Body>
+</S:Envelope>

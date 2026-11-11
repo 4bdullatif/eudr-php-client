@@ -11,6 +11,7 @@ final readonly class SoapEnvelope
 {
     private function __construct(
         private \SimpleXMLElement $body,
+        private ?\SimpleXMLElement $header = null,
     ) {
     }
 
@@ -37,12 +38,20 @@ final readonly class SoapEnvelope
             throw new XmlException('Could not find SOAP Body in response');
         }
 
-        return new self($body);
+        return new self($body, self::findSoapChild($simpleXml, 'Header'));
     }
 
     public function getBody(): \SimpleXMLElement
     {
         return $this->body;
+    }
+
+    /**
+     * The SOAP Header element of the response, or null when the response has no header.
+     */
+    public function getHeader(): ?\SimpleXMLElement
+    {
+        return $this->header;
     }
 
     /**
@@ -55,6 +64,11 @@ final readonly class SoapEnvelope
 
     public static function findSoapBody(\SimpleXMLElement $xml): ?\SimpleXMLElement
     {
+        return self::findSoapChild($xml, 'Body');
+    }
+
+    private static function findSoapChild(\SimpleXMLElement $xml, string $name): ?\SimpleXMLElement
+    {
         $namespaces = $xml->getNamespaces(true);
 
         foreach ($namespaces as $uri) {
@@ -63,8 +77,8 @@ final readonly class SoapEnvelope
                 || str_contains($uri, 'soap-envelope')
             ) {
                 $children = $xml->children($uri);
-                if (isset($children->Body)) {
-                    return $children->Body;
+                if (isset($children->$name)) {
+                    return $children->$name;
                 }
             }
         }

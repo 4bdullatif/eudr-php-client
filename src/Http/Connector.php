@@ -119,6 +119,22 @@ final class Connector
      */
     public function sendAndParse(Request $request): \SimpleXMLElement
     {
+        return $this->sendAndParseEnvelope($request)->getBody();
+    }
+
+    /**
+     * Send a request, parse the SOAP envelope and check for faults, returning the
+     * parsed envelope (giving access to both the SOAP Header and Body).
+     *
+     * @throws ApiException
+     * @throws \Eudr\Exceptions\XmlException
+     * @throws AuthenticationException
+     * @throws HttpException
+     * @throws \Eudr\Exceptions\ValidationException
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    public function sendAndParseEnvelope(Request $request): SoapEnvelope
+    {
         $response = $this->send($request);
         $responseBody = $response->getBody();
         if ($responseBody->isSeekable()) {
@@ -134,7 +150,7 @@ final class Connector
             );
         }
 
-        return $envelope->getBody();
+        return $envelope;
     }
 
     private function sendRequest(RequestInterface $request): ResponseInterface
