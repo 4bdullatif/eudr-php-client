@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+    <S:Body>
+        <S:Fault>
+            <faultcode>S:Server</faultcode>
+            <faultstring>Business rules validation failed</faultstring>
+            <detail>
+                <ns5:BusinessRulesValidationException xmlns:ns5="http://ec.europa.eu/tracesnt/certificate/eudr/due-diligence-statement/v4"
+                                                      xmlns:ns4="http://ec.europa.eu/sanco/tracesnt/error/v01">
+                    <ns4:Error>
+                        <ns4:ID>EUDR-GROUPING-NOT-ALLOWED-ON-AMEND</ns4:ID>
+                        <ns4:Message>Grouping can only be set on the initial submission</ns4:Message>
+                        <ns4:Field>groupedDeclarations</ns4:Field>
+                    </ns4:Error>
+                </ns5:BusinessRulesValidationException>
+            </detail>
+        </S:Fault>
+    </S:Body>
+</S:Envelope>

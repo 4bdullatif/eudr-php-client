@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+    <!-- Response Header (same structure as submitDds response) -->
+    <S:Body>
+        <ns5:GetDdsResponse xmlns:ns3="http://ec.europa.eu/tracesnt/certificate/eudr/common/v4"
+                            xmlns:ns5="http://ec.europa.eu/tracesnt/certificate/eudr/due-diligence-statement/v4">
+            <ns5:ddsOverviewList>
+                <ns3:uuid>071874bd-8c62-4cac-8eb6-b2fbe003410c</ns3:uuid>
+                <ns3:internalReferenceNumber>26BEDWNW9JD1TN</ns3:internalReferenceNumber>
+                <ns3:referenceNumber>26BE7XTVCZAQ2S</ns3:referenceNumber>
+                <ns3:referenceNumberInfo>Assigned</ns3:referenceNumberInfo>
+                <ns3:verificationNumber>SFFCB4Y3</ns3:verificationNumber>
+                <ns3:status>AVAILABLE</ns3:status>
+                <ns3:date>2026-05-20T09:55:01.000Z</ns3:date>
+                <ns3:updatedBy>User3 User3</ns3:updatedBy>
+                <ns3:version>1</ns3:version>
+            </ns5:ddsOverviewList>
+        </ns5:GetDdsResponse>
+    </S:Body>
+</S:Envelope>

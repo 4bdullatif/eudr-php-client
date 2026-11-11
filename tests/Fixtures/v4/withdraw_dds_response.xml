@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+    <!-- Response Header (same structure as submitDds response) -->
+    <S:Body>
+        <ns5:WithdrawDdsResponse xmlns:ns5="http://ec.europa.eu/tracesnt/certificate/eudr/due-diligence-statement/v4"
+                                 xmlns:ns3="http://ec.europa.eu/tracesnt/certificate/eudr/common/v4">
+            <ns5:uuid>071874bd-8c62-4cac-8eb6-b2fbe003410c</ns5:uuid>
+            <ns5:status>WITHDRAWN</ns5:status>
+        </ns5:WithdrawDdsResponse>
+    </S:Body>
+</S:Envelope>
